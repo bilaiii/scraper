@@ -2,7 +2,7 @@
 A simle WebScraper to fetch homework tasks (and maybe more in the future) from Edus - my school journal platform
 ## Installation
 
-deps:
+Dependencies:
 - [uv](https://github.com/astral-sh/uv)
 - [geckodriver](https://github.com/mozilla/geckodriver) in your PATH
 
