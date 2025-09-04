@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from os import getenv
 
 options = webdriver.FirefoxOptions()
-options.add_argument("-headless")
+# options.add_argument("-headless")
 driver = webdriver.Firefox(options=options)
 
 ignore = [NoSuchElementException, ElementNotInteractableException]
@@ -41,24 +41,30 @@ def main():
 
     wait.until(lambda _ : "Головна" in driver.title)
 
-    driver.get("https://vilni-zl.edus.school/pupils/tasks")
-    
-    wait.until(lambda _ : driver.find_elements(By.CLASS_NAME, "future"))
-          
-    tasks = driver.find_elements(By.CLASS_NAME, "future")
-
-    compareDate = ""
-    for e in tasks:
-        title = e.find_element(By.XPATH, ".//p[@class='title']")
-        body = e.find_element(By.XPATH, ".//div[@class='task']")
-        date = e.find_element(By.XPATH, ".//p[@class='prepare-till']/span")
-        if date.text != compareDate:
-            print("## " + date.text + "\n")
-        compareDate = date.text
-        print("- [ ] " + title.text, "\n" + body.text[12:], "\n")
-
+    print("""What do you want to do?
+            1. See a list of homework tasks
+            2. See my notifications""")
+    inp = input("Choose here: ")
+    if "1" in inp:
+        driver.get("https://vilni-zl.edus.school/pupils/tasks")
+        wait.until(lambda _ : driver.find_elements(By.CLASS_NAME, "future"))
+        tasks = driver.find_elements(By.CLASS_NAME, "future")
+        compareDate = ""
+        for e in tasks:
+            title = e.find_element(By.XPATH, ".//p[@class='title']")
+            body = e.find_element(By.XPATH, ".//div[@class='task']")
+            date = e.find_element(By.XPATH, ".//p[@class='prepare-till']/span")
+            if date.text != compareDate:
+                print("## " + date.text + "\n")
+            compareDate = date.text
+            print("- [ ] " + title.text, "\n" + body.text[12:], "\n")
+    elif "2" in inp:
+        driver.get("https://vilni-zl.edus.school/pupils/notifications")
+        wait.until(lambda _ : driver.find_elements(By.CLASS_NAME, "notifications-wrap"))
+        notifications = driver.find_elements(By.CSS_SELECTOR, ".notifications-wrap.is-new")
+        print(notifications)
+                
     driver.quit()
-        
 if __name__ == '__main__':
     main()
     
